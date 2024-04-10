@@ -1,0 +1,26 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+main {
+    margin: 3rem auto;
+    max-width: 60em;
+    width: calc(100% - 6rem);
+}
+
+.focus-gallery {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 1.5rem;
+}
+
+.focus-gallery img {
+    border-radius: 0.25rem;
+}
+
+.focus-gallery figcaption {
+    display: none;
+}
