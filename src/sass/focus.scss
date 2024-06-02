@@ -223,7 +223,7 @@ $system-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica 
             top: 1rem;
             left: 1rem;
         }
-        
+
     }
 }
 
@@ -240,6 +240,14 @@ $system-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica 
     &.is-active {
         visibility: visible;
 
+        .loading-icon {
+            animation: rotate 2s linear infinite;
+
+            circle {
+                animation: stretch calc(2s * 0.75) ease-in-out infinite;
+            }
+        }
+
         + .focus-podium {
             visibility: hidden;
         }
@@ -250,15 +258,13 @@ $system-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica 
         width: 2.5rem;
         vertical-align: middle;
         transform-origin: center;
-        animation: rotate 2s linear infinite;
-        
+
         circle {
             fill: none;
             stroke: rgba(255, 255, 255, 0.7);
             stroke-dasharray: 1, 200;
             stroke-dashoffset: 0;
             stroke-linecap: round;
-            animation: stretch calc(2s * 0.75) ease-in-out infinite;
         }
     }
 

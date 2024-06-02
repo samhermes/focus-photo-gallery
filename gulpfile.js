@@ -1,7 +1,7 @@
 'use strict'
 
 let gulp = require('gulp'),
-    sass = require('gulp-sass'),
+    sass = require('gulp-sass')(require('sass')),
     concat = require('gulp-concat'),
     minify = require('gulp-minify'),
     eslint = require('gulp-eslint')

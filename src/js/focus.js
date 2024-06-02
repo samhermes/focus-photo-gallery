@@ -19,7 +19,7 @@ const focus = (focusOptions) => {
         const selector = focusOptions && focusOptions.selector ? focusOptions.selector : '.focus-gallery'
         const galleries = document.querySelectorAll(selector)
         const activeGalleries = []
-        
+
         // Check to see if there are any anchor tags in any of the galleries
         Array.from(galleries).forEach((gallery) => {
             const galleryAnchors = gallery.querySelectorAll('a')
@@ -27,7 +27,7 @@ const focus = (focusOptions) => {
                 activeGalleries.push(gallery)
             }
         })
-        
+
         if (activeGalleries) {
             createStage()
 
@@ -168,7 +168,7 @@ const focus = (focusOptions) => {
 
             ul.appendChild(listItem)
         })
-        
+
         // Set the stage
         const podium = document.querySelector('.focus-podium')
         setTimeout(() => podium.appendChild(ul), 150)
@@ -272,7 +272,7 @@ const focus = (focusOptions) => {
         backstage.currentItem = index
         backstage.images = images
         backstage.imageCount = images.length
-        
+
         // Open stage with all items and index of opening item
         openStage(event)
     }
