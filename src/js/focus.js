@@ -38,8 +38,9 @@ const focus = (focusOptions) => {
     }
 
     const createStage = () => {
-        const stage = document.createElement('dialog')
+        const stage = document.createElement('div')
         stage.classList.add('focus-stage')
+        stage.setAttribute('role', 'dialog')
         stage.setAttribute('aria-labelledby', 'focus-stage-title')
 
         const stageTitle = document.createElement('h1')
@@ -97,14 +98,44 @@ const focus = (focusOptions) => {
         return loadingIcon
     }
 
+    const lockFocus = (e) => {
+        backstage.currentFocus = e.currentTarget
+        document.addEventListener('keydown', modalTab)
+    }
+
+    const unlockFocus = () => {
+        backstage.currentFocus.focus()
+        document.removeEventListener('keydown', modalTab)
+    }
+
+    const modalTab = (event) => {
+        const focusableSelectors = ['a[href]', 'area[href]', 'input:not([disabled])', 'select:not([disabled])', 'textarea:not([disabled])', 'button:not([disabled])', 'iframe', 'object', 'embed', '[contenteditable]', '[tabindex]:not([tabindex^="-"])']
+
+        const modal = document.querySelector('.focus-stage')
+        const focusableElements = [].slice.call( modal.querySelectorAll( focusableSelectors.join() ) )
+
+        if (event.keyCode === 9) {
+            // Get the index of the currently focused element within the modal
+            var focusedIndex = focusableElements.indexOf(document.activeElement)
+
+            // If the shift key is not in use, check to see if we're on the last element
+            if (!event.shiftKey && focusedIndex === focusableElements.length - 1) {
+                // Focus first item within modal
+                focusableElements[0].focus()
+                event.preventDefault()
+            // If the shift key is in use, we're going backwards, so check to see if we're on the first element
+            } else if (event.shiftKey && (focusedIndex === 0 || focusedIndex === -1)) {
+                // Focus last item within modal
+                focusableElements[focusableElements.length - 1].focus()
+                event.preventDefault()
+            }
+        }
+    }
+
     const openStage = (e) => {
-        const stage = document.querySelector('.focus-stage')
-
         bodyElement.classList.add('focus-stage-open')
-        stage.showModal()
-
         if (backstage.imageCount === 1) {
-            stage.classList.add('controls-hidden')
+            document.querySelector('.focus-stage').classList.add('controls-hidden')
             document.querySelector('.focus-previous').setAttribute('disabled', '')
             document.querySelector('.focus-next').setAttribute('disabled', '')
         }
@@ -144,7 +175,12 @@ const focus = (focusOptions) => {
 
         document.addEventListener('click', handleNavigationEvents)
         document.addEventListener('keydown', handleNavigationEvents)
-
+        lockFocus(e)
+        if (backstage.imageCount === 1) {
+            document.querySelector('.focus-close').focus()
+        } else {
+            document.querySelector('.focus-next').focus()
+        }
         handleRestartStatus()
     }
 
@@ -165,27 +201,23 @@ const focus = (focusOptions) => {
             nextButton.querySelector('.screen-reader-text').innerHTML = 'Restart'
         } else {
             nextButton.classList.remove('is-restart')
-            nextButton.querySelector('.screen-reader-text').innerHTML = 'Next'
+            nextButton.querySelector('.screen-reader-text').innerHTML = 'Previous'
         }
     }
 
     const closeStage = () => {
-        const stage = document.querySelector('.focus-stage')
-
         // Remove class from body
         bodyElement.classList.remove('focus-stage-open')
-        stage.close()
-
         document.querySelector('.focus-stage').classList.remove('controls-hidden')
         document.querySelector('.focus-previous').removeAttribute('disabled')
         document.querySelector('.focus-next').removeAttribute('disabled')
-
         // Clear the stage
         const podium = document.querySelector('.focus-podium')
         podium.innerHTML = ''
         podium.classList.remove('has-caption')
         document.removeEventListener('click', handleNavigationEvents)
         document.removeEventListener('keydown', handleNavigationEvents)
+        unlockFocus()
     }
 
     const goToNextImage = () => {
